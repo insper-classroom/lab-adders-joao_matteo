@@ -51,17 +51,9 @@ def fullAdder(a, b, c, soma, carry):
 
 @block
 def adder2bits(x, y, soma, carry):
-    """Somador de 2 bits.
-
-    Implementacao esperada com dois full adders, gerando
-    uma soma de 2 bits e carry final.
-
-    Args:
-        x: Vetor de entrada de 2 bits.
-        y: Vetor de entrada de 2 bits.
-        soma: Vetor de saida de 2 bits.
-        carry: Carry de saida.
-    """
+    s = Signal(bool(0))
+    half1 = halfAdder(x[0], y[0], soma[0], s)
+    half2 = fullAdder(x[1], y[1], s, soma[1], carry)
     return instances()
 
 
