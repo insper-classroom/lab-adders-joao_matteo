@@ -35,16 +35,15 @@ def halfAdder(a, b, soma, carry):
 
 @block
 def fullAdder(a, b, c, soma, carry):
-    s = [Signal(bool(0)),
-    Signal(bool(0)), 
-    Signal(bool(0))]
+    s = [Signal(bool(0)) for i in range(3)]
+    haList = [None for i in range(2)]  # (1)
 
-    half_1 = halfAdder(a, b, s[0], s[1]) 
-    half_2 = halfAdder(c, s[0], soma, s[2]) 
+    haList[0] = halfAdder(a, b, s[0], s[1]) 
+    haList[1] = halfAdder(c, s[0], soma, s[2])
 
     @always_comb
     def comb():
-        carry.next = s[1] | s[2] 
+        carry.next = s[1] | s[2]
 
     return instances()
 
@@ -59,17 +58,13 @@ def adder2bits(x, y, soma, carry):
 
 @block
 def adder(x, y, soma, carry):
-    """Somador generico para vetores de mesmo tamanho.
+    s = [Signal(bool(0)) for i in range(len(x) - 1)]
+    hallist = [None for i in range(len(x))]
+    hallist[0] = halfAdder(x[0], y[0], soma[0], s[0]),
 
-    Implementacao esperada por ripple-carry (encadeamento de carries)
-    usando celulas de full adder.
-
-    Args:
-        x: Vetor de entrada.
-        y: Vetor de entrada.
-        soma: Vetor de saida com mesma largura de x/y.
-        carry: Carry de saida mais significativo.
-    """
+    for e in range(1, len(x)- 1):
+        hallist[e] = fullAdder(x[e], y[e], s[e-1], soma[e], s[e])
+    hallist[-1] = fullAdder(x[-1], y[-1], s[-1], soma[-1], carry)
     return instances()
 
 
