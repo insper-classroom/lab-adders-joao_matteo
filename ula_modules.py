@@ -67,22 +67,13 @@ def adder(x, y, soma, carry):
     hallist[-1] = fullAdder(x[-1], y[-1], s[-1], soma[-1], carry)
     return instances()
 
-
 @block
 def addervb(x, y, soma, carry):
-    """Somador vetorial em estilo comportamental.
 
-    Versao combinacional que pode usar operacoes aritmeticas diretas
-    sobre os vetores para gerar soma e carry.
-
-    Args:
-        x: Vetor de entrada.
-        y: Vetor de entrada.
-        soma: Vetor de saida.
-        carry: Carry de saida.
-    """
     @always_comb
     def comb():
-        pass
+        total = int(x) + int(y)
+        soma.next = total & ((1 << len(x)) - 1)
+        carry.next = (total >> len(x)) & 1
 
     return instances()
